@@ -1,9 +1,11 @@
 <Window xmlns="https://github.com/avaloniaui"
+        xmlns:conv="using:UniverseApp.Converters"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:UniverseApp.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:CompileBindings="True"
         x:Class="UniverseApp.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
@@ -12,7 +14,49 @@
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
-
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
+    
+    <Window.Resources>
+        <conv:ImagePathMultiConverter x:Key="ImagePathMultiConverter" />
+    </Window.Resources>
+    
+    <Grid ColumnDefinitions="* * *" RowDefinitions="* *">
+        <Image 
+            Grid.Row="0"
+            Grid.Column="0"
+            Width="32.8"
+        >
+            <Image.Source>
+                <MultiBinding Converter="{StaticResource ImagePathMultiConverter}" Mode="OneWay">
+                    <Binding Path="FirstAstronomicalObject.Type"></Binding>
+                    <Binding Path="FirstAstronomicalObject.Name"></Binding>
+                </MultiBinding>
+            </Image.Source>
+        </Image>
+        
+        <Image
+            Grid.Row="1"
+            Grid.Column="1"
+            Width="126.78"
+        >
+            <Image.Source>
+                <MultiBinding Converter="{StaticResource ImagePathMultiConverter}" Mode="OneWay">
+                    <Binding Path="SecondAstronomicalObject.Type"></Binding>
+                    <Binding Path="SecondAstronomicalObject.Name"></Binding>
+                </MultiBinding>
+            </Image.Source>
+        </Image>
+        
+        <Image
+            Grid.Row="0"
+            Grid.Column="2"
+            Width="360" 
+        >
+            <Image.Source>
+                <MultiBinding Converter="{StaticResource ImagePathMultiConverter}" Mode="OneWay">
+                    <Binding Path="ThirdAstronomicalObject.Type"></Binding>
+                    <Binding Path="ThirdAstronomicalObject.Name"></Binding>
+                </MultiBinding>
+            </Image.Source>
+        </Image>
+    </Grid>
 </Window>

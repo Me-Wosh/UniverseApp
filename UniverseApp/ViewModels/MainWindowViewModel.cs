@@ -6,16 +6,25 @@ namespace UniverseApp.ViewModels;
 public class MainWindowViewModel : ViewModelBase
 {
     private AstronomicalObject _firstAstronomicalObject;
-    private AstronomicalObject _secondAstronomicalObject;
-    private AstronomicalObject _thirdAstronomicalObject;
+    private AstronomicalObject _middleAstronomicalObject;
+    private AstronomicalObject _lastAstronomicalObject;
+    private static MainWindowViewModel? _mainWindowViewModel;
 
     public MainWindowViewModel()
     {
         var astronomicalObjects = new AstronomicalObjects();
         
         FirstAstronomicalObject = astronomicalObjects.ListOfObjects[0];
-        SecondAstronomicalObject = astronomicalObjects.ListOfObjects[1];
-        ThirdAstronomicalObject = astronomicalObjects.ListOfObjects[2];
+        MiddleAstronomicalObject = astronomicalObjects.ListOfObjects[1];
+        LastAstronomicalObject = astronomicalObjects.ListOfObjects[2];
+    }
+
+    public static MainWindowViewModel GetViewModel()
+    {
+        if (_mainWindowViewModel == null)
+            _mainWindowViewModel = new MainWindowViewModel();
+        
+        return _mainWindowViewModel;
     }
     
     public AstronomicalObject FirstAstronomicalObject
@@ -24,15 +33,15 @@ public class MainWindowViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _firstAstronomicalObject, value);
     }
     
-    public AstronomicalObject SecondAstronomicalObject
+    public AstronomicalObject MiddleAstronomicalObject
     {
-        get => _secondAstronomicalObject;
-        set => this.RaiseAndSetIfChanged(ref _secondAstronomicalObject, value);
+        get => _middleAstronomicalObject;
+        set => this.RaiseAndSetIfChanged(ref _middleAstronomicalObject, value);
     }
     
-    public AstronomicalObject ThirdAstronomicalObject
+    public AstronomicalObject LastAstronomicalObject
     {
-        get => _thirdAstronomicalObject;
-        set => this.RaiseAndSetIfChanged(ref _thirdAstronomicalObject, value);
+        get => _lastAstronomicalObject;
+        set => this.RaiseAndSetIfChanged(ref _lastAstronomicalObject, value);
     }
 }

@@ -17,13 +17,16 @@
     
     <Window.Resources>
         <conv:ImagePathMultiConverter x:Key="ImagePathMultiConverter" />
+        <conv:WidthConverter x:Key="WidthConverter" />
     </Window.Resources>
     
     <Grid ColumnDefinitions="* * *" RowDefinitions="* *">
         <Image 
             Grid.Row="0"
             Grid.Column="0"
-            Width="32.8"
+            Width="{Binding FirstAstronomicalObject.Diameter,
+                    Mode=OneWay,
+                    Converter={StaticResource WidthConverter}}"
         >
             <Image.Source>
                 <MultiBinding Converter="{StaticResource ImagePathMultiConverter}" Mode="OneWay">
@@ -36,12 +39,14 @@
         <Image
             Grid.Row="1"
             Grid.Column="1"
-            Width="126.78"
+            Width="{Binding MiddleAstronomicalObject.Diameter,
+                    Mode=OneWay,
+                    Converter={StaticResource WidthConverter}}"
         >
             <Image.Source>
                 <MultiBinding Converter="{StaticResource ImagePathMultiConverter}" Mode="OneWay">
-                    <Binding Path="SecondAstronomicalObject.Type"></Binding>
-                    <Binding Path="SecondAstronomicalObject.Name"></Binding>
+                    <Binding Path="MiddleAstronomicalObject.Type"></Binding>
+                    <Binding Path="MiddleAstronomicalObject.Name"></Binding>
                 </MultiBinding>
             </Image.Source>
         </Image>
@@ -49,12 +54,14 @@
         <Image
             Grid.Row="0"
             Grid.Column="2"
-            Width="360" 
+            Width="{Binding LastAstronomicalObject.Diameter,
+                    Mode=OneWay, 
+                    Converter={StaticResource WidthConverter}}"
         >
             <Image.Source>
                 <MultiBinding Converter="{StaticResource ImagePathMultiConverter}" Mode="OneWay">
-                    <Binding Path="ThirdAstronomicalObject.Type"></Binding>
-                    <Binding Path="ThirdAstronomicalObject.Name"></Binding>
+                    <Binding Path="LastAstronomicalObject.Type"></Binding>
+                    <Binding Path="LastAstronomicalObject.Name"></Binding>
                 </MultiBinding>
             </Image.Source>
         </Image>

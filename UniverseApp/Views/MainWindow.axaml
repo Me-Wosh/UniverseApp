@@ -21,7 +21,8 @@
     </Window.Resources>
     
     <Grid ColumnDefinitions="* * *" RowDefinitions="* *">
-        <Image 
+        <Image
+            Name="FirstAstronomicalObject"
             Grid.Row="0"
             Grid.Column="0"
             Width="{Binding FirstAstronomicalObject.Diameter,
@@ -34,9 +35,16 @@
                     <Binding Path="FirstAstronomicalObject.Name"></Binding>
                 </MultiBinding>
             </Image.Source>
+            
+            <Image.Transitions>
+                <Transitions>
+                    <DoubleTransition Property="Opacity" Duration="0.5"></DoubleTransition>
+                </Transitions>
+            </Image.Transitions>
         </Image>
         
         <Image
+            Name="MiddleAstronomicalObject"
             Grid.Row="1"
             Grid.Column="1"
             Width="{Binding MiddleAstronomicalObject.Diameter,
@@ -49,9 +57,16 @@
                     <Binding Path="MiddleAstronomicalObject.Name"></Binding>
                 </MultiBinding>
             </Image.Source>
+            
+            <Image.Transitions>
+                <Transitions>
+                    <DoubleTransition Property="Opacity" Duration="0.5"></DoubleTransition>
+                </Transitions>
+            </Image.Transitions>
         </Image>
         
         <Image
+            Name="LastAstronomicalObject"
             Grid.Row="0"
             Grid.Column="2"
             Width="{Binding LastAstronomicalObject.Diameter,
@@ -64,6 +79,12 @@
                     <Binding Path="LastAstronomicalObject.Name"></Binding>
                 </MultiBinding>
             </Image.Source>
+            
+            <Image.Transitions>
+                <Transitions>
+                    <DoubleTransition Property="Opacity" Duration="0.5"></DoubleTransition>
+                </Transitions>
+            </Image.Transitions>
         </Image>
     </Grid>
 </Window>

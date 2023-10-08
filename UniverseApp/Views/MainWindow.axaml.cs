@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Input;
 using UniverseApp.Services;
 
 namespace UniverseApp.Views;
@@ -11,6 +12,9 @@ public partial class MainWindow : Window
 
         var service = new ZoomInOutService();
         
-        KeyUp += service.OnKeyUp;
+        KeyUp += delegate(object? sender, KeyEventArgs e)
+        {
+            service.OnKeyUp(sender, e, FirstAstronomicalObject, MiddleAstronomicalObject, LastAstronomicalObject);
+        };
     }
 }

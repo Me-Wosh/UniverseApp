@@ -8,51 +8,63 @@ public sealed class AstronomicalObjects
     {
         new AstronomicalObject
         {
-            Id = 0,
             Name = "Mercury",
             Diameter = 4_880_000,
-            Type = ObjectType.Planet
+            Category = ObjectCategory.Planet,
+            Classification = ObjectClassification.TerrestrialPlanet,
+            Description = "The Smallest planet of the Solar System"
         },
         
         new AstronomicalObject
         {
-            Id = 1,
             Name = "Earth", 
             Diameter = 12_742_000, 
-            Type = ObjectType.Planet
+            Category = ObjectCategory.Planet,
+            Classification = ObjectClassification.TerrestrialPlanet,
+            Description = "The only planet known to harbor life"
         },
         
         new AstronomicalObject
         {
-            Id = 2,
             Name = "Proxima Centauri b",
             Diameter = 16_564_600,
-            Type = ObjectType.Planet,
-            Description = "Closest potentially habitable planet"
+            Category = ObjectCategory.Planet,
+            Classification = ObjectClassification.TerrestrialPlanet,
+            Description = "The closest potentially habitable planet"
         },
         
         new AstronomicalObject
         {
-            Id = 3,
             Name = "Neptune", 
             Diameter = 49_244_000,
-            Type = ObjectType.Planet
+            Category = ObjectCategory.Planet,
+            Classification = ObjectClassification.IceGiant
         },
         
         new AstronomicalObject
         {
-            Id = 4,
             Name = "Jupiter", 
             Diameter = 139_822_000, 
-            Type = ObjectType.Planet
+            Category = ObjectCategory.Planet,
+            Classification = ObjectClassification.GasGiant,
+            Description = "The largest planet of the Solar System"
         },
         
         new AstronomicalObject
         {
-            Id = 5,
+            Name = "Proxima Centauri",
+            Diameter = 214_554_000,
+            Category = ObjectCategory.Star,
+            Classification = ObjectClassification.RedDwarf,
+            Description = "The nearest star to The Sun (4.2465 light years away)"
+        },
+        
+        new AstronomicalObject
+        {
             Name = "The Sun",
             Diameter = 1_392_700_000,
-            Type = ObjectType.Star
+            Category = ObjectCategory.Star,
+            Classification = ObjectClassification.YellowDwarf
         }
     };
 }

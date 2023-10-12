@@ -1,6 +1,6 @@
 namespace UniverseApp.Models;
 
-public static class ObjectType
+public static class ObjectCategory
 {
     public static readonly string LifeForm = "LifeForm";
     public static readonly string HumanCreation = "HumanCreation";

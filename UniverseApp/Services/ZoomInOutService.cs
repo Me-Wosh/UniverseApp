@@ -20,7 +20,9 @@ public sealed class ZoomInOutService
         {
             case Key.Up:
             {
-                var firstObjectId = _mainWindowViewModel.FirstAstronomicalObject.Id;
+                var astronomicalObjectsList = new AstronomicalObjects().ListOfObjects;
+                var firstObjectId = astronomicalObjectsList.FindIndex(
+                        o => o.Name == _mainWindowViewModel.FirstAstronomicalObject.Name); 
 
                 if (firstObjectId <= 0)
                     break;
@@ -42,8 +44,9 @@ public sealed class ZoomInOutService
 
             case Key.Down:
             {
-                var lastObjectId = _mainWindowViewModel.LastAstronomicalObject.Id;
                 var astronomicalObjectsList = new AstronomicalObjects().ListOfObjects;
+                var lastObjectId = astronomicalObjectsList.FindIndex(
+                    o => o.Name == _mainWindowViewModel.LastAstronomicalObject.Name);
 
                 if (lastObjectId >= astronomicalObjectsList.Count - 1)
                     break;
@@ -65,5 +68,7 @@ public sealed class ZoomInOutService
                 break;
             }
         }
+
+        _mainWindowViewModel.ObjectDescription = "";
     }
 }

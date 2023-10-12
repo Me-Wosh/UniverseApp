@@ -2,9 +2,9 @@ namespace UniverseApp.Models;
 
 public class AstronomicalObject
 {
-    public int Id { get; set; }
-    public string Name { get; set; } = ""; 
-    public double Diameter { get; set; }
-    public string Type { get; set; } = ObjectType.Other;
-    public string Description { get; set; } = "";
+    public string Name { get; init; } = ""; 
+    public double Diameter { get; init; }
+    public string Category { get; init; } = ObjectCategory.Other;
+    public string Classification { get; init; } = ObjectClassification.Other;
+    public string Description { get; init; } = "";
 }

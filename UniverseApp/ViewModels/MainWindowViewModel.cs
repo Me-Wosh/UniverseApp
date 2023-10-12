@@ -5,10 +5,11 @@ namespace UniverseApp.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
-    private AstronomicalObject _firstAstronomicalObject;
-    private AstronomicalObject _middleAstronomicalObject;
-    private AstronomicalObject _lastAstronomicalObject;
     private static MainWindowViewModel? _mainWindowViewModel;
+    private AstronomicalObject _firstAstronomicalObject = new ();
+    private AstronomicalObject _middleAstronomicalObject = new ();
+    private AstronomicalObject _lastAstronomicalObject = new ();
+    private string _objectDescription = "";
 
     public MainWindowViewModel()
     {
@@ -43,5 +44,11 @@ public class MainWindowViewModel : ViewModelBase
     {
         get => _lastAstronomicalObject;
         set => this.RaiseAndSetIfChanged(ref _lastAstronomicalObject, value);
+    }
+
+    public string ObjectDescription
+    {
+        get => _objectDescription; 
+        set => this.RaiseAndSetIfChanged(ref _objectDescription, value);
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
@@ -11,16 +12,20 @@ public class ImagePathMultiConverter : IMultiValueConverter
 {
     public object Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (values.Count != 2)
+        if (values.Count != 3)
             return new BindingNotification(
-                new ArgumentException("Number of parameters exceeded maximum number of parameters: 2"),
+                new ArgumentException("Please provide Category, Name and Classification"),
                 BindingErrorType.Error);
         
-        var type = values[0] as string ?? "";
+        var category = values[0] as string ?? "";
         var name = values[1] as string ?? "";
+        var classification = values[2] as string ?? "";
         
-        return type == "Galaxy"
-            ? new Bitmap($"Assets/Galaxies/{name}.png")
-            : new Bitmap($"Assets/{type}s/{name}.png");
+        if (category == "Galaxy")
+            return new Bitmap($"Assets/Galaxies/{name}.png");
+
+        return File.Exists($"Assets/{category}s/{name}.png") 
+            ? new Bitmap($"Assets/{category}s/{name}.png") 
+            : new Bitmap($"Assets/{category}s/{classification}.png");
     }
 }

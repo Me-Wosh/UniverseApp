@@ -16,7 +16,7 @@ public class WidthConverter : IValueConverter
         
         try
         {
-            var mainWindowViewModel = MainWindowViewModel.GetViewModel();
+            var mainWindowViewModel = AllObjectsViewModel.GetViewModel();
             
             var firstObject = mainWindowViewModel.FirstAstronomicalObject;
             var middleObject = mainWindowViewModel.MiddleAstronomicalObject;

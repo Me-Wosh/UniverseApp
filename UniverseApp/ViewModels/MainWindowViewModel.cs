@@ -1,54 +1,34 @@
-﻿using ReactiveUI;
-using UniverseApp.Models;
+﻿using System.Reactive;
+using ReactiveUI;
 
 namespace UniverseApp.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
-    private static MainWindowViewModel? _mainWindowViewModel;
-    private AstronomicalObject _firstAstronomicalObject = new ();
-    private AstronomicalObject _middleAstronomicalObject = new ();
-    private AstronomicalObject _lastAstronomicalObject = new ();
-    private string _objectDescription = "";
+    private ViewModelBase _contentViewModel = AllObjectsViewModel.GetViewModel();
+    private bool _areTabsOpened;
+
+    public ReactiveCommand<Unit, Unit> OpenCloseTabs { get; init; }
+    public ReactiveCommand<Unit, Unit> GoToAllObjectsView { get; init; }
+    public ReactiveCommand<Unit, Unit> GoToObjectsByTypeView { get; init; }
+    public ReactiveCommand<Unit, Unit> GoToCompareObjectsView;
+    
 
     public MainWindowViewModel()
     {
-        var astronomicalObjects = new AstronomicalObjects();
-        
-        FirstAstronomicalObject = astronomicalObjects.ListOfObjects[0];
-        MiddleAstronomicalObject = astronomicalObjects.ListOfObjects[1];
-        LastAstronomicalObject = astronomicalObjects.ListOfObjects[2];
+        OpenCloseTabs = ReactiveCommand.Create(() => { AreTabsOpened = !AreTabsOpened; });
+        GoToAllObjectsView = ReactiveCommand.Create(() => { ContentViewModel = AllObjectsViewModel.GetViewModel(); });
+        GoToObjectsByTypeView = ReactiveCommand.Create(() => { ContentViewModel = new ObjectsByTypeViewModel(); });
+    }
+    public ViewModelBase ContentViewModel
+    {
+        get => _contentViewModel; 
+        private set => this.RaiseAndSetIfChanged(ref _contentViewModel, value);
     }
 
-    public static MainWindowViewModel GetViewModel()
+    public bool AreTabsOpened
     {
-        if (_mainWindowViewModel == null)
-            _mainWindowViewModel = new MainWindowViewModel();
-        
-        return _mainWindowViewModel;
-    }
-    
-    public AstronomicalObject FirstAstronomicalObject
-    {
-        get => _firstAstronomicalObject;
-        set => this.RaiseAndSetIfChanged(ref _firstAstronomicalObject, value);
-    }
-    
-    public AstronomicalObject MiddleAstronomicalObject
-    {
-        get => _middleAstronomicalObject;
-        set => this.RaiseAndSetIfChanged(ref _middleAstronomicalObject, value);
-    }
-    
-    public AstronomicalObject LastAstronomicalObject
-    {
-        get => _lastAstronomicalObject;
-        set => this.RaiseAndSetIfChanged(ref _lastAstronomicalObject, value);
-    }
-
-    public string ObjectDescription
-    {
-        get => _objectDescription; 
-        set => this.RaiseAndSetIfChanged(ref _objectDescription, value);
+        get => _areTabsOpened; 
+        set => this.RaiseAndSetIfChanged(ref _areTabsOpened, value);
     }
 }

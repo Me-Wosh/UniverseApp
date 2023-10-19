@@ -1,5 +1,4 @@
 <Window xmlns="https://github.com/avaloniaui"
-        xmlns:conv="using:UniverseApp.Converters"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:UniverseApp.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -10,95 +9,43 @@
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="UniverseApp">
-
-    <Design.DataContext>
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
-    
-    <Window.Resources>
-        <conv:ImagePathMultiConverter x:Key="ImagePathMultiConverter" />
-        <conv:WidthConverter x:Key="WidthConverter" />
-    </Window.Resources>
     
     <Window.Styles>
-        <Style Selector="Image">
-            <Setter Property="Transitions">
-                <Transitions>
-                    <DoubleTransition Property="Opacity" Duration="0.5"></DoubleTransition>
-                </Transitions>
-            </Setter>
+        <Style Selector="Button">
+            <Setter Property="Width" Value="110"></Setter>
+            <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+        </Style>
+        
+        <Style Selector="Button#OpenCloseTabs">
+            <Setter Property="Width" Value="32"></Setter>
+            <Setter Property="Height" Value="32"></Setter>
         </Style>
     </Window.Styles>
     
-    <DockPanel>
-        <TextBlock 
-            Name="ObjectDescription" 
-            Text="{Binding ObjectDescription}"
-            Padding="5" 
-            Opacity="0"
-            DockPanel.Dock="Bottom"
+    <Panel>
+        <SplitView 
+            IsPaneOpen="{Binding AreTabsOpened}" 
+            DisplayMode="Overlay" 
+            OpenPaneLength="140"
         >
-            <TextBlock.Transitions>
-                <Transitions>
-                    <DoubleTransition Property="Opacity" Duration="0.1"></DoubleTransition>
-                </Transitions>
-            </TextBlock.Transitions>
-        </TextBlock>
+            <SplitView.Pane>
+                <StackPanel Orientation="Vertical" Margin="15 67 15 15" Spacing="5">
+                    <Button Command="{Binding GoToAllObjectsView}">All</Button>
+                    <Button Command="{Binding GoToObjectsByTypeView}">By Type</Button>
+                    <Button>Compare</Button>
+                </StackPanel>
+            </SplitView.Pane>
         
-        <Grid ColumnDefinitions="* * *" RowDefinitions="* *">
-            <Image
-                Name="FirstAstronomicalObject"
-                Grid.Row="0"
-                Grid.Column="0"
-                Width="{Binding FirstAstronomicalObject.Diameter,
-                        Mode=OneWay,
-                        Converter={StaticResource WidthConverter}}"
-                PointerExited="HideDescription"
-            >
-                <Image.Source>
-                    <MultiBinding Converter="{StaticResource ImagePathMultiConverter}" Mode="OneWay">
-                        <Binding Path="FirstAstronomicalObject.Category"></Binding>
-                        <Binding Path="FirstAstronomicalObject.Name"></Binding>
-                        <Binding Path="FirstAstronomicalObject.Classification"></Binding>
-                    </MultiBinding>
-                </Image.Source>
-            </Image>
-            
-            <Image
-                Name="MiddleAstronomicalObject"
-                Grid.Row="1"
-                Grid.Column="1"
-                Width="{Binding MiddleAstronomicalObject.Diameter,
-                        Mode=OneWay,
-                        Converter={StaticResource WidthConverter}}"
-                PointerExited="HideDescription"
-            >
-                <Image.Source>
-                    <MultiBinding Converter="{StaticResource ImagePathMultiConverter}" Mode="OneWay">
-                        <Binding Path="MiddleAstronomicalObject.Category"></Binding>
-                        <Binding Path="MiddleAstronomicalObject.Name"></Binding>
-                        <Binding Path="MiddleAstronomicalObject.Classification"></Binding>
-                    </MultiBinding>
-                </Image.Source>
-            </Image>
-            
-            <Image
-                Name="LastAstronomicalObject"
-                Grid.Row="0"
-                Grid.Column="2"
-                Width="{Binding LastAstronomicalObject.Diameter,
-                        Mode=OneWay, 
-                        Converter={StaticResource WidthConverter}}"
-                PointerExited="HideDescription"
-            >
-                <Image.Source>
-                    <MultiBinding Converter="{StaticResource ImagePathMultiConverter}" Mode="OneWay">
-                        <Binding Path="LastAstronomicalObject.Category"></Binding>
-                        <Binding Path="LastAstronomicalObject.Name"></Binding>
-                        <Binding Path="LastAstronomicalObject.Classification"></Binding>
-                    </MultiBinding>
-                </Image.Source>
-            </Image>
-        </Grid>
-    </DockPanel>
+            <ContentControl Content="{Binding ContentViewModel}"></ContentControl>
+        </SplitView>
+        
+        <Button 
+            Name="OpenCloseTabs" 
+            VerticalAlignment="Top" 
+            Margin="15" 
+            Command="{Binding OpenCloseTabs}"
+        >
+            <Image Source="/Assets/Icons/Tabs.png"></Image>
+        </Button>
+    </Panel>
 </Window>

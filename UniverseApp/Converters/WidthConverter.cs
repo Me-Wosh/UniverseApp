@@ -1,6 +1,5 @@
 using System;
 using System.Globalization;
-using System.Linq;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using UniverseApp.ViewModels;
@@ -16,15 +15,10 @@ public class WidthConverter : IValueConverter
         
         try
         {
-            var mainWindowViewModel = AllObjectsViewModel.GetViewModel();
-            
-            var firstObject = mainWindowViewModel.FirstAstronomicalObject;
-            var middleObject = mainWindowViewModel.MiddleAstronomicalObject;
-            var lastObject = mainWindowViewModel.LastAstronomicalObject;
+            var objectsByCategoryViewModel = ObjectsByCategoryViewModel.GetViewModel();
             
             var objectsDiameter = System.Convert.ToDouble(value);
-            var largestDiameter =
-                new [] { firstObject.Diameter, middleObject.Diameter, lastObject.Diameter }.Max();
+            var largestDiameter = objectsByCategoryViewModel.LastAstronomicalObject.Diameter;
             
             const short largestObjectPixelsWidth = 360;
             

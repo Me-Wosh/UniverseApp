@@ -5,9 +5,11 @@
       <map>
         <entry key="UniverseApp/App.axaml" value="UniverseApp/UniverseApp.csproj" />
         <entry key="UniverseApp/Views/AllObjectsView.axaml" value="UniverseApp/UniverseApp.csproj" />
+        <entry key="UniverseApp/Views/CompareObjectsView.axaml" value="UniverseApp/UniverseApp.csproj" />
         <entry key="UniverseApp/Views/DefaultView.axaml" value="UniverseApp/UniverseApp.csproj" />
         <entry key="UniverseApp/Views/DefaultWindowView.axaml" value="UniverseApp/UniverseApp.csproj" />
         <entry key="UniverseApp/Views/MainWindow.axaml" value="UniverseApp/UniverseApp.csproj" />
+        <entry key="UniverseApp/Views/ObjectsByCategoryView.axaml" value="UniverseApp/UniverseApp.csproj" />
         <entry key="UniverseApp/Views/ObjectsByTypeView.axaml" value="UniverseApp/UniverseApp.csproj" />
       </map>
     </option>

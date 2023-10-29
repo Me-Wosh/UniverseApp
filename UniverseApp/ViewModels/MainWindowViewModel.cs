@@ -5,20 +5,23 @@ namespace UniverseApp.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
-    private ViewModelBase _contentViewModel = AllObjectsViewModel.GetViewModel();
+    private ViewModelBase _contentViewModel = ObjectsByCategoryViewModel.GetViewModel();
     private bool _areTabsOpened;
 
     public ReactiveCommand<Unit, Unit> OpenCloseTabs { get; init; }
-    public ReactiveCommand<Unit, Unit> GoToAllObjectsView { get; init; }
-    public ReactiveCommand<Unit, Unit> GoToObjectsByTypeView { get; init; }
-    public ReactiveCommand<Unit, Unit> GoToCompareObjectsView;
+    public ReactiveCommand<Unit, Unit> GoToObjectsByCategoryView { get; init; }
     
-
+    public ReactiveCommand<Unit, Unit> GoToCompareObjectsView { get; init; }
+    
     public MainWindowViewModel()
     {
         OpenCloseTabs = ReactiveCommand.Create(() => { AreTabsOpened = !AreTabsOpened; });
-        GoToAllObjectsView = ReactiveCommand.Create(() => { ContentViewModel = AllObjectsViewModel.GetViewModel(); });
-        GoToObjectsByTypeView = ReactiveCommand.Create(() => { ContentViewModel = new ObjectsByTypeViewModel(); });
+        
+        GoToObjectsByCategoryView = 
+            ReactiveCommand.Create(() => { ContentViewModel = ObjectsByCategoryViewModel.GetViewModel(); });
+        
+        GoToCompareObjectsView = 
+            ReactiveCommand.Create(() => { ContentViewModel = new CompareObjectsViewModel(); });
     }
     public ViewModelBase ContentViewModel
     {

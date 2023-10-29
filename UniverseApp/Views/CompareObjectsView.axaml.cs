@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace UniverseApp.Views;
 
-public partial class ObjectsByTypeView : UserControl
+public partial class CompareObjectsView : UserControl
 {
-    public ObjectsByTypeView()
+    public CompareObjectsView()
     {
         InitializeComponent();
     }

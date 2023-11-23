@@ -1,8 +1,128 @@
 <UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:conv="using:UniverseApp.Converters"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:UniverseApp.ViewModels"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:models="clr-namespace:UniverseApp.Models"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="UniverseApp.Views.CompareObjectsView">
-    CompareObjects
+             x:Class="UniverseApp.Views.CompareObjectsView"
+             x:DataType="vm:CompareObjectsViewModel"
+             Background="Transparent">
+    
+    <UserControl.Resources>
+        <conv:ImagePathMultiConverter x:Key="ImagePathMultiConverter" />
+    </UserControl.Resources>
+    
+    <UserControl.Styles>
+        <Style Selector="Image">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Width" Duration="0.35" Easing="SineEaseIn"></DoubleTransition>
+                </Transitions>
+            </Setter>
+        </Style>
+    </UserControl.Styles>
+    
+    <Panel Margin="15">
+        <Grid ColumnDefinitions="* *" RowDefinitions="*">
+            <Image 
+                Grid.Row="0" 
+                Grid.Column="0"
+                Name="FirstSelectedObject"
+                Width="{Binding FirstObjectWidth, Mode=OneWay}"
+            >
+                <Image.Source>
+                    <MultiBinding Converter="{StaticResource ImagePathMultiConverter}" Mode="OneWay">
+                        <Binding Path="FirstSelectedObject.Category"></Binding>
+                        <Binding Path="FirstSelectedObject.Name"></Binding>
+                        <Binding Path="FirstSelectedObject.Classification"></Binding>
+                    </MultiBinding>
+                </Image.Source>
+            </Image>
+            
+            <Image 
+                Grid.Row="0" 
+                Grid.Column="1" 
+                Name="SecondSelectedObject"
+                Width="{Binding SecondObjectWidth, Mode=OneWay}"
+            >
+                <Image.Source>
+                    <MultiBinding Converter="{StaticResource ImagePathMultiConverter}" Mode="OneWay">
+                        <Binding Path="SecondSelectedObject.Category"></Binding>
+                        <Binding Path="SecondSelectedObject.Name"></Binding>
+                        <Binding Path="SecondSelectedObject.Classification"></Binding>
+                    </MultiBinding>
+                </Image.Source>
+            </Image>
+        </Grid>
+        
+        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Orientation="Horizontal" Spacing="10">
+            <StackPanel Name="FirstSearchContainer" Spacing="5">
+                <TextBox 
+                    Name="FirstSearchBar"
+                    PointerReleased="ShowFirstSearchList"
+                    LostFocus="HideSearchList"
+                    TextChanging="UpdateFirstSearchList"
+                    Watermark="Select first object"
+                    HorizontalContentAlignment="Center"
+                ></TextBox>
+                
+                <ListBox 
+                    Name="FirstSearchList" 
+                    IsVisible="False"
+                    SelectedItem="{Binding FirstSelectedObject, Mode=OneWayToSource}"
+                    SelectionMode="Single"
+                    MaxHeight="266"
+                >
+                    <ListBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type models:AstronomicalObject}">
+                            <StackPanel>
+                                <TextBlock Text="{Binding Name}"></TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+            
+            <StackPanel Name="SecondSearchContainer" Spacing="5">
+                <TextBox 
+                    Name="SecondSearchBar"
+                    PointerReleased="ShowSecondSearchList"
+                    LostFocus="HideSearchList"
+                    TextChanging="UpdateSecondSearchList"
+                    Watermark="Select second object"
+                    HorizontalContentAlignment="Center"
+                ></TextBox>
+            
+                <ListBox 
+                    Name="SecondSearchList" 
+                    IsVisible="False"
+                    SelectedItem="{Binding SecondSelectedObject, Mode=OneWayToSource}"
+                    SelectionMode="Single"
+                >
+                    <ListBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type models:AstronomicalObject}">
+                            <StackPanel>
+                                <TextBlock Text="{Binding Name}"></TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+        </StackPanel>
+        
+        <TextBlock 
+            Name="ObjectDescription" 
+            Text="{Binding ObjectDescription, Mode=OneWay}"
+            VerticalAlignment="Bottom"
+            Opacity="0"
+        >
+            <TextBlock.Transitions>
+                <Transitions>
+                    <DoubleTransition Property="Opacity" Duration="0.25"></DoubleTransition>
+                </Transitions>
+            </TextBlock.Transitions>
+        </TextBlock>
+    </Panel>
 </UserControl>

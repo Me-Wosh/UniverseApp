@@ -4,6 +4,7 @@
     <option name="projectPerEditor">
       <map>
         <entry key="UniverseApp/App.axaml" value="UniverseApp/UniverseApp.csproj" />
+        <entry key="UniverseApp/SearchBox.axaml" value="UniverseApp/UniverseApp.csproj" />
         <entry key="UniverseApp/Views/AllObjectsView.axaml" value="UniverseApp/UniverseApp.csproj" />
         <entry key="UniverseApp/Views/CompareObjectsView.axaml" value="UniverseApp/UniverseApp.csproj" />
         <entry key="UniverseApp/Views/DefaultView.axaml" value="UniverseApp/UniverseApp.csproj" />

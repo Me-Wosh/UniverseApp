@@ -12,7 +12,7 @@ public sealed class AstronomicalObjects
             Diameter = 4_880_000,
             Category = ObjectCategory.Planet,
             Classification = ObjectClassification.TerrestrialPlanet,
-            Description = "The Smallest planet of the Solar System"
+            Description = "The smallest planet of the Solar System"
         },
         
         new AstronomicalObject

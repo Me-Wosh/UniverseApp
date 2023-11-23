@@ -31,8 +31,7 @@
             <SplitView.Pane>
                 <StackPanel Orientation="Vertical" Margin="15 67 15 15" Spacing="5">
                     <Button Command="{Binding GoToObjectsByCategoryView}">By Category</Button>
-                    <Button Command="{Binding GoToCompareObjectsView}">Compare</Button>
-                    <Button>Credits</Button>
+                    <Button Command="{Binding GoToCompareObjectsView}">Comparison</Button>
                 </StackPanel>
             </SplitView.Pane>
         

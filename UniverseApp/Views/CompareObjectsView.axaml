@@ -10,8 +10,13 @@
              x:DataType="vm:CompareObjectsViewModel"
              Background="Transparent">
     
+    <UserControl.DataContext>
+        <vm:CompareObjectsViewModel/>
+    </UserControl.DataContext>
+    
     <UserControl.Resources>
         <conv:ImagePathMultiConverter x:Key="ImagePathMultiConverter" />
+        <conv:DiameterToMetresMultiConverter x:Key="DiameterToMetresConverter" />
     </UserControl.Resources>
     
     <UserControl.Styles>
@@ -112,17 +117,35 @@
             </StackPanel>
         </StackPanel>
         
-        <TextBlock 
-            Name="ObjectDescription" 
-            Text="{Binding ObjectDescription, Mode=OneWay}"
-            VerticalAlignment="Bottom"
-            Opacity="0"
-        >
-            <TextBlock.Transitions>
-                <Transitions>
-                    <DoubleTransition Property="Opacity" Duration="0.25"></DoubleTransition>
-                </Transitions>
-            </TextBlock.Transitions>
-        </TextBlock>
+        <DockPanel VerticalAlignment="Bottom">
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="10">
+                <TextBlock>
+                    <TextBlock.Text>
+                        <MultiBinding Converter="{StaticResource DiameterToMetresConverter}" Mode="OneWay">
+                            <Binding Path="Diameter"></Binding>
+                            <Binding Path="Pixels"></Binding>
+                        </MultiBinding> 
+                    </TextBlock.Text>
+                </TextBlock>
+                    
+                <Canvas Width="37.79527559" VerticalAlignment="Center">
+                    <Line StartPoint="0, -3" EndPoint="0, 5" Stroke="White"></Line>
+                    <Line StartPoint="0, 5" EndPoint="37.79527559, 5" Stroke="White"></Line>
+                    <Line StartPoint="37.79527559, -3" EndPoint="37.79527559, 5" Stroke="White"></Line>
+                </Canvas> 
+            </StackPanel>
+            
+            <TextBlock 
+                Name="ObjectDescription" 
+                Text="{Binding ObjectDescription, Mode=OneWay}"
+                Opacity="0"
+            >
+                <TextBlock.Transitions>
+                    <Transitions>
+                        <DoubleTransition Property="Opacity" Duration="0.2"></DoubleTransition>
+                    </Transitions>
+                </TextBlock.Transitions>
+            </TextBlock>    
+        </DockPanel>
     </Panel>
 </UserControl>

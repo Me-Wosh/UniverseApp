@@ -1,48 +1,59 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
-using Avalonia.Controls;
 using ReactiveUI;
 using UniverseApp.Models;
+using UniverseApp.Services;
 
 namespace UniverseApp.ViewModels;
 
 public sealed class ObjectsByCategoryViewModel : ViewModelBase
 {
-    private static ObjectsByCategoryViewModel? _objectsByCategoryViewModel;
-    private ObservableCollection<AstronomicalObject> _astronomicalObjects =
-        new ObservableCollection<AstronomicalObject>(new AstronomicalObjects().ListOfObjects);
-    private AstronomicalObject _firstAstronomicalObject;
+    private ObservableCollection<AstronomicalObject> _astronomicalObjects = new (new AstronomicalObjects().ListOfObjects);
+    private AstronomicalObject _leftAstronomicalObject;
     private AstronomicalObject _middleAstronomicalObject;
-    private AstronomicalObject _lastAstronomicalObject;
-    private ComboBoxItem? _selectedCategory;
+    private AstronomicalObject _rightAstronomicalObject;
+    // max pixel width
+    private double _leftAstronomicalObjectWidth = 283;
+    private double _middleAstronomicalObjectWidth = 283;
+    private double _rightAstronomicalObjectWidth = 283;
+    private string? _selectedCategory;
     private double _objectsOpacity = 1;
     private string _objectDescription = "None";
 
     public ObjectsByCategoryViewModel()
     {
-        _firstAstronomicalObject = _astronomicalObjects[0];
-        _middleAstronomicalObject = _astronomicalObjects[1];
-        _lastAstronomicalObject = _astronomicalObjects[2];
+        LeftAstronomicalObject = _astronomicalObjects[0];
+        MiddleAstronomicalObject = _astronomicalObjects[1];
+        RightAstronomicalObject = _astronomicalObjects[2];
+        
+        this.WhenAnyValue(
+            x => x.LeftAstronomicalObject,
+            x => x.MiddleAstronomicalObject,
+            x => x.RightAstronomicalObject
+        ).Subscribe(_ =>
+        {
+            var diameters = new[]
+                { _leftAstronomicalObject.Diameter, _middleAstronomicalObject.Diameter, _rightAstronomicalObject.Diameter };
+
+            var resizedObjects = new ResizeObjectsService().ResizeObjects(diameters);
+            
+            LeftAstronomicalObjectWidth = resizedObjects[0];
+            MiddleAstronomicalObjectWidth = resizedObjects[1];
+            RightAstronomicalObjectWidth = resizedObjects[2];
+        });
     }
     
-    public static ObjectsByCategoryViewModel GetViewModel()
-    {
-        if (_objectsByCategoryViewModel == null)
-            _objectsByCategoryViewModel = new ObjectsByCategoryViewModel();
-        
-        return _objectsByCategoryViewModel;
-    }
-
     public ObservableCollection<AstronomicalObject> AstronomicalObjects => _astronomicalObjects;
     
-    public ComboBoxItem? SelectedCategory
+    public string? SelectedCategory
     {
         get => _selectedCategory;
         set
         {
             this.RaiseAndSetIfChanged(ref _selectedCategory, value);
 
-            if (value.Content == "None")
+            if (value == "None")
             {
                 _astronomicalObjects =
                     new ObservableCollection<AstronomicalObject>(new AstronomicalObjects().ListOfObjects);
@@ -52,19 +63,19 @@ public sealed class ObjectsByCategoryViewModel : ViewModelBase
             {
                 _astronomicalObjects =
                     new ObservableCollection<AstronomicalObject>(
-                        new AstronomicalObjects().ListOfObjects.Where(o => o.Category == value.Content));
+                        new AstronomicalObjects().ListOfObjects.Where(o => o.Category == value));
             }
 
-            LastAstronomicalObject = _astronomicalObjects[2];
-            FirstAstronomicalObject = _astronomicalObjects[0];
+            LeftAstronomicalObject = _astronomicalObjects[0];
             MiddleAstronomicalObject = _astronomicalObjects[1];
+            RightAstronomicalObject = _astronomicalObjects[2];
         }
     }
     
-    public AstronomicalObject FirstAstronomicalObject
+    public AstronomicalObject LeftAstronomicalObject
     {
-        get => _firstAstronomicalObject;
-        set => this.RaiseAndSetIfChanged(ref _firstAstronomicalObject, value);
+        get => _leftAstronomicalObject;
+        set => this.RaiseAndSetIfChanged(ref _leftAstronomicalObject, value);
     }
     
     public AstronomicalObject MiddleAstronomicalObject
@@ -73,10 +84,28 @@ public sealed class ObjectsByCategoryViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _middleAstronomicalObject, value);
     }
     
-    public AstronomicalObject LastAstronomicalObject
+    public AstronomicalObject RightAstronomicalObject
     {
-        get => _lastAstronomicalObject;
-        set => this.RaiseAndSetIfChanged(ref _lastAstronomicalObject, value);
+        get => _rightAstronomicalObject;
+        set => this.RaiseAndSetIfChanged(ref _rightAstronomicalObject, value);
+    }
+
+    public double LeftAstronomicalObjectWidth
+    {
+        get => _leftAstronomicalObjectWidth;
+        set => this.RaiseAndSetIfChanged(ref _leftAstronomicalObjectWidth, value);
+    }
+    
+    public double MiddleAstronomicalObjectWidth
+    {
+        get => _middleAstronomicalObjectWidth;
+        set => this.RaiseAndSetIfChanged(ref _middleAstronomicalObjectWidth, value);
+    }
+    
+    public double RightAstronomicalObjectWidth
+    {
+        get => _rightAstronomicalObjectWidth;
+        set => this.RaiseAndSetIfChanged(ref _rightAstronomicalObjectWidth, value);
     }
 
     public double ObjectsOpacity

@@ -11,144 +11,120 @@
     
     <UserControl.Resources>
         <conv:ImagePathMultiConverter x:Key="ImagePathMultiConverter" />
-        <conv:WidthConverter x:Key="WidthConverter" />
+        <conv:DiameterToMetresMultiConverter x:Key="DiameterToMetresConverter"/>
     </UserControl.Resources>
     
     <UserControl.Styles>
         <Style Selector="Image">
             <Setter Property="Transitions">
                 <Transitions>
-                    <DoubleTransition Property="Opacity" Duration="0.5"></DoubleTransition>
+                    <DoubleTransition Property="Opacity" Duration="0.7" Easing="CubicEaseOut"></DoubleTransition>
+                    <DoubleTransition Property="Width" Duration="0.7" Easing="CubicEaseOut"></DoubleTransition>
+                    <DoubleTransition Property="Height" Duration="0.7" Easing="CubicEaseOut"></DoubleTransition>
+                    <DoubleTransition Property="Canvas.Left" Duration="0.7" Easing="CubicEaseOut"></DoubleTransition>
+                    <DoubleTransition Property="Canvas.Top" Duration="0.7" Easing="CubicEaseOut"></DoubleTransition>
                 </Transitions>
             </Setter>
         </Style>
     </UserControl.Styles>
     
-    <Panel>
+    <Panel Margin="15">
         <DockPanel>
-            <TextBlock 
-                Name="ObjectDescription" 
-                Text="{Binding ObjectDescription}"
-                Padding="5" 
-                Opacity="0"
-                DockPanel.Dock="Bottom"
-            >
-                <TextBlock.Transitions>
-                    <Transitions>
-                        <DoubleTransition Property="Opacity" Duration="0.1"></DoubleTransition>
-                    </Transitions>
-                </TextBlock.Transitions>
-            </TextBlock>
+            <DockPanel DockPanel.Dock="Bottom">
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="10">
+                    <TextBlock>
+                        <TextBlock.Text>
+                            <MultiBinding Converter="{StaticResource DiameterToMetresConverter}" Mode="OneWay">
+                                <Binding Path="RightAstronomicalObject.Diameter"></Binding>
+                            </MultiBinding> 
+                        </TextBlock.Text>
+                    </TextBlock>
+                    
+                    <Canvas Width="37.79527559" VerticalAlignment="Center">
+                        <Line StartPoint="0, -3" EndPoint="0, 5" Stroke="White"></Line>
+                        <Line StartPoint="0, 5" EndPoint="37.79527559, 5" Stroke="White"></Line>
+                        <Line StartPoint="37.79527559, -3" EndPoint="37.79527559, 5" Stroke="White"></Line>
+                    </Canvas> 
+                </StackPanel>
+                
+                <TextBlock 
+                    Name="ObjectDescription" 
+                    Text="{Binding ObjectDescription}"
+                    Opacity="0"
+                >
+                    <TextBlock.Transitions>
+                        <Transitions>
+                            <DoubleTransition Property="Opacity" Duration="0.2"></DoubleTransition>
+                        </Transitions>
+                    </TextBlock.Transitions>
+                </TextBlock>    
+            </DockPanel>
             
             <Grid ColumnDefinitions="* * *" RowDefinitions="* *">
-                <Image
-                    Name="FirstAstronomicalObject"
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    Width="{Binding FirstAstronomicalObject.Diameter,
-                            Mode=OneWay,
-                            Converter={StaticResource WidthConverter}}"
-                    Opacity="{Binding ObjectsOpacity}"
-                    PointerExited="HideDescription"
-                >
-                    <Image.Source>
-                        <MultiBinding Converter="{StaticResource ImagePathMultiConverter}" Mode="OneWay">
-                            <Binding Path="FirstAstronomicalObject.Category"></Binding>
-                            <Binding Path="FirstAstronomicalObject.Name"></Binding>
-                            <Binding Path="FirstAstronomicalObject.Classification"></Binding>
-                        </MultiBinding>
-                    </Image.Source>
-                </Image>
+                <Canvas Grid.Row="0" Grid.Column="0" Name="CanvasTopLeft">
+                    <Image
+                        Name="LeftAstronomicalObject"
+                        Width="{Binding LeftAstronomicalObjectWidth, Mode=OneWay}"
+                        Height="{Binding LeftAstronomicalObjectWidth, Mode=OneWay}"
+                        Opacity="{Binding ObjectsOpacity}"
+                        PointerExited="HideDescription"
+                    >
+                        <Image.Source>
+                            <MultiBinding Converter="{StaticResource ImagePathMultiConverter}" Mode="OneWay">
+                                <Binding Path="LeftAstronomicalObject.Category"></Binding>
+                                <Binding Path="LeftAstronomicalObject.Name"></Binding>
+                                <Binding Path="LeftAstronomicalObject.Classification"></Binding>
+                            </MultiBinding>
+                        </Image.Source>
+                    </Image>
+                </Canvas>
                 
-                <Image
-                    Name="MiddleAstronomicalObject"
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    Width="{Binding MiddleAstronomicalObject.Diameter,
-                            Mode=OneWay,
-                            Converter={StaticResource WidthConverter}}"
-                    Opacity="{Binding ObjectsOpacity}"
-                    PointerExited="HideDescription"
-                >
-                    <Image.Source>
-                        <MultiBinding Converter="{StaticResource ImagePathMultiConverter}" Mode="OneWay">
-                            <Binding Path="MiddleAstronomicalObject.Category"></Binding>
-                            <Binding Path="MiddleAstronomicalObject.Name"></Binding>
-                            <Binding Path="MiddleAstronomicalObject.Classification"></Binding>
-                        </MultiBinding>
-                    </Image.Source>
-                </Image>
+                <Canvas Grid.Row="1" Grid.Column="1" Name="CanvasBottomMiddle">
+                    <Image
+                        Name="MiddleAstronomicalObject"
+                        Width="{Binding MiddleAstronomicalObjectWidth, Mode=OneWay}"
+                        Height="{Binding MiddleAstronomicalObjectWidth, Mode=OneWay}"
+                        Opacity="{Binding ObjectsOpacity}"
+                        PointerExited="HideDescription"
+                    >
+                        <Image.Source>
+                            <MultiBinding Converter="{StaticResource ImagePathMultiConverter}" Mode="OneWay">
+                                <Binding Path="MiddleAstronomicalObject.Category"></Binding>
+                                <Binding Path="MiddleAstronomicalObject.Name"></Binding>
+                                <Binding Path="MiddleAstronomicalObject.Classification"></Binding>
+                            </MultiBinding>
+                        </Image.Source>
+                    </Image>
+                </Canvas>
                 
-                <Image
-                    Name="LastAstronomicalObject"
-                    Grid.Row="0"
-                    Grid.Column="2"
-                    Width="{Binding LastAstronomicalObject.Diameter,
-                            Mode=OneWay, 
-                            Converter={StaticResource WidthConverter}}"
-                    Opacity="{Binding ObjectsOpacity}"
-                    PointerExited="HideDescription"
-                >
-                    <Image.Source>
-                        <MultiBinding Converter="{StaticResource ImagePathMultiConverter}" Mode="OneWay">
-                            <Binding Path="LastAstronomicalObject.Category"></Binding>
-                            <Binding Path="LastAstronomicalObject.Name"></Binding>
-                            <Binding Path="LastAstronomicalObject.Classification"></Binding>
-                        </MultiBinding>
-                    </Image.Source>
-                </Image>
+                <Canvas Grid.Row="0" Grid.Column="2" Name="CanvasTopRight">
+                    <Image
+                        Name="RightAstronomicalObject"
+                        Width="{Binding RightAstronomicalObjectWidth, Mode=OneWay}"
+                        Height="{Binding RightAstronomicalObjectWidth, Mode=OneWay}"
+                        Opacity="{Binding ObjectsOpacity}"
+                        PointerExited="HideDescription"
+                    >
+                        <Image.Source>
+                            <MultiBinding Converter="{StaticResource ImagePathMultiConverter}" Mode="OneWay">
+                                <Binding Path="RightAstronomicalObject.Category"></Binding>
+                                <Binding Path="RightAstronomicalObject.Name"></Binding>
+                                <Binding Path="RightAstronomicalObject.Classification"></Binding>
+                            </MultiBinding>
+                        </Image.Source>
+                    </Image>
+                </Canvas>
             </Grid>
         </DockPanel>
         
         <ComboBox
-            Name="ComboBox"
+            Name="CategorySelector"
             Focusable="False"
             SelectedValue="{Binding SelectedCategory}"
             PlaceholderText="Select Category"
             HorizontalAlignment="Center"
             HorizontalContentAlignment="Center"
             Width="155"
-            Margin="15"
-        >
-            <ComboBoxItem>
-                None
-            </ComboBoxItem>
-            
-            <ComboBoxItem>
-                LifeForm
-            </ComboBoxItem>
-            
-            <ComboBoxItem>
-                HumanCreation
-            </ComboBoxItem>
-            
-            <ComboBoxItem>
-                Moon
-            </ComboBoxItem>
-            
-            <ComboBoxItem>
-                Planet
-            </ComboBoxItem>
-            
-            <ComboBoxItem>
-                Star
-            </ComboBoxItem>
-            
-            <ComboBoxItem>
-                SolarSystem
-            </ComboBoxItem>
-            
-            <ComboBoxItem>
-                BlackHole
-            </ComboBoxItem>
-            
-            <ComboBoxItem>
-                Galaxy
-            </ComboBoxItem>
-            
-            <ComboBoxItem>
-                Universe    
-            </ComboBoxItem>
-        </ComboBox>
+        ></ComboBox>
     </Panel>
 </UserControl>

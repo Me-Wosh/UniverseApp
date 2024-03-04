@@ -27,13 +27,19 @@ public partial class CompareObjectsView : UserControl
         
         FirstSelectedObject.PointerEntered += delegate(object? sender, PointerEventArgs e)
         {
-            DisplayAstronomicalObjectDescription(sender, e, (DataContext as CompareObjectsViewModel).FirstSelectedObject.Name,
+            DisplayAstronomicalObjectDescription(
+                sender, 
+                e, 
+                (DataContext as CompareObjectsViewModel).FirstSelectedObject.Name,
                 (DataContext as CompareObjectsViewModel).FirstSelectedObject.Description);
         };
         
         SecondSelectedObject.PointerEntered += delegate(object? sender, PointerEventArgs e)
         {
-            DisplayAstronomicalObjectDescription(sender, e, (DataContext as CompareObjectsViewModel).SecondSelectedObject.Name,
+            DisplayAstronomicalObjectDescription(
+                sender, 
+                e, 
+                (DataContext as CompareObjectsViewModel).SecondSelectedObject.Name,
                 (DataContext as CompareObjectsViewModel).SecondSelectedObject.Description);
         };
 

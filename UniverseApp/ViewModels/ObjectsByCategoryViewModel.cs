@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
+using DynamicData;
 using ReactiveUI;
 using UniverseApp.Models;
 using UniverseApp.Services;
@@ -9,7 +11,6 @@ namespace UniverseApp.ViewModels;
 
 public sealed class ObjectsByCategoryViewModel : ViewModelBase
 {
-    private ObservableCollection<AstronomicalObject> _astronomicalObjects = new (new AstronomicalObjects().ListOfObjects);
     private AstronomicalObject _leftAstronomicalObject;
     private AstronomicalObject _middleAstronomicalObject;
     private AstronomicalObject _rightAstronomicalObject;
@@ -23,9 +24,11 @@ public sealed class ObjectsByCategoryViewModel : ViewModelBase
 
     public ObjectsByCategoryViewModel()
     {
-        LeftAstronomicalObject = _astronomicalObjects[0];
-        MiddleAstronomicalObject = _astronomicalObjects[1];
-        RightAstronomicalObject = _astronomicalObjects[2];
+        AstronomicalObjects = new ObservableCollection<AstronomicalObject>(new AstronomicalObjects().ListOfObjects);
+        
+        LeftAstronomicalObject = AstronomicalObjects[0];
+        MiddleAstronomicalObject = AstronomicalObjects[1];
+        RightAstronomicalObject = AstronomicalObjects[2];
         
         this.WhenAnyValue(
             x => x.LeftAstronomicalObject,
@@ -44,7 +47,7 @@ public sealed class ObjectsByCategoryViewModel : ViewModelBase
         });
     }
     
-    public ObservableCollection<AstronomicalObject> AstronomicalObjects => _astronomicalObjects;
+    public ObservableCollection<AstronomicalObject> AstronomicalObjects { get; }
     
     public string? SelectedCategory
     {
@@ -53,22 +56,23 @@ public sealed class ObjectsByCategoryViewModel : ViewModelBase
         {
             this.RaiseAndSetIfChanged(ref _selectedCategory, value);
 
+            var listOfObjects = new AstronomicalObjects().ListOfObjects;
+            
             if (value == "None")
             {
-                _astronomicalObjects =
-                    new ObservableCollection<AstronomicalObject>(new AstronomicalObjects().ListOfObjects);
+                AstronomicalObjects.Clear();
+                AstronomicalObjects.AddRange(listOfObjects);
             }
 
             else
             {
-                _astronomicalObjects =
-                    new ObservableCollection<AstronomicalObject>(
-                        new AstronomicalObjects().ListOfObjects.Where(o => o.Category == value));
+                AstronomicalObjects.Clear();
+                AstronomicalObjects.AddRange(listOfObjects.Where(o => o.Category == value));
             }
 
-            LeftAstronomicalObject = _astronomicalObjects[0];
-            MiddleAstronomicalObject = _astronomicalObjects[1];
-            RightAstronomicalObject = _astronomicalObjects[2];
+            LeftAstronomicalObject = AstronomicalObjects[0];
+            MiddleAstronomicalObject = AstronomicalObjects[1];
+            RightAstronomicalObject = AstronomicalObjects[2];
         }
     }
     

@@ -2,7 +2,9 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
 using Avalonia.Input;
+using Avalonia.Media;
 using UniverseApp.Models;
 using UniverseApp.ViewModels;
 
@@ -11,6 +13,8 @@ namespace UniverseApp.Views;
 public partial class ObjectsByCategoryView : UserControl
 {
     private static bool _animationPlaying;
+    private static int _currentZoomLevel;
+
     public ObjectsByCategoryView()
     {
         InitializeComponent();
@@ -71,11 +75,26 @@ public partial class ObjectsByCategoryView : UserControl
         
         Canvas.SetLeft(RightAstronomicalObject, 0);
         Canvas.SetTop(RightAstronomicalObject, 0);
+
+        var astronomicalObjectsCount = new AstronomicalObjects().ListOfObjects.Count;
+        GenerateZoomLevels(astronomicalObjectsCount);
         
         Loaded += (_, _) =>
         {
             var parentWindow = Window.GetTopLevel(this);
             parentWindow!.KeyUp += OnKeyUp;
+            
+            (DataContext as ObjectsByCategoryViewModel)!.AstronomicalObjects.CollectionChanged += (_, _) =>
+            {
+                astronomicalObjectsCount = (DataContext as ObjectsByCategoryViewModel)!.AstronomicalObjects.Count;
+                
+                if (ZoomLevels.Children.Count > 0)
+                {
+                    ZoomLevels.Children.Clear();
+                }
+                
+                GenerateZoomLevels(astronomicalObjectsCount);
+            };
         };
     }
     
@@ -91,7 +110,7 @@ public partial class ObjectsByCategoryView : UserControl
         ObjectDescription.Opacity = 1;
     }
     
-    private async void OnKeyUp(object? sender, KeyEventArgs e)
+    private void OnKeyUp(object? sender, KeyEventArgs e)
     {
         if (_animationPlaying)
             return;
@@ -102,139 +121,222 @@ public partial class ObjectsByCategoryView : UserControl
         { 
             case Key.Up:
             {
-                var firstObjectId = objectsByCategoryViewModel.AstronomicalObjects.ToList()
+                var leftObjectIndex = objectsByCategoryViewModel.AstronomicalObjects.ToList()
                     .FindIndex(o => o.Name == objectsByCategoryViewModel.LeftAstronomicalObject.Name);
                 
-                if (firstObjectId <= 0)
+                if (leftObjectIndex <= 0)
                     break;
 
-                _animationPlaying = true;
-                
-                objectsByCategoryViewModel.LeftAstronomicalObjectWidth = 600;
-                objectsByCategoryViewModel.MiddleAstronomicalObjectWidth = 600;
-                objectsByCategoryViewModel.RightAstronomicalObjectWidth = 600;
-                
-                CenterObjects(false);
-                
-                objectsByCategoryViewModel.ObjectsOpacity = 0;
-                
-                await Task.Delay(TimeSpan.FromMilliseconds(700));
-                
-                objectsByCategoryViewModel.LeftAstronomicalObjectWidth = 0;
-                objectsByCategoryViewModel.MiddleAstronomicalObjectWidth = 0;
-                objectsByCategoryViewModel.RightAstronomicalObjectWidth = 0;
-                
-                CenterObjects(true);
-
-                await Task.Delay(TimeSpan.FromMilliseconds(700));
-                
-                objectsByCategoryViewModel.LeftAstronomicalObject =
-                    objectsByCategoryViewModel.AstronomicalObjects[firstObjectId - 3];
-                
-                objectsByCategoryViewModel.MiddleAstronomicalObject =
-                    objectsByCategoryViewModel.AstronomicalObjects[firstObjectId - 2];
-                
-                objectsByCategoryViewModel.RightAstronomicalObject = 
-                    objectsByCategoryViewModel.AstronomicalObjects[firstObjectId - 1];
-                
-                CenterObjects(false);
-                
-                objectsByCategoryViewModel.ObjectsOpacity = 1;
-
-                _animationPlaying = false;
+                ZoomIn(objectsByCategoryViewModel, leftObjectIndex);
                 
                 break;
             }
 
             case Key.Down:
             {
-                var lastObjectId = objectsByCategoryViewModel.AstronomicalObjects.ToList()
+                var rightObjectIndex = objectsByCategoryViewModel.AstronomicalObjects.ToList()
                     .FindIndex(o => o.Name == objectsByCategoryViewModel.RightAstronomicalObject.Name);
 
-                if (lastObjectId >= objectsByCategoryViewModel.AstronomicalObjects.Count - 4)
+                if (rightObjectIndex >= objectsByCategoryViewModel.AstronomicalObjects.Count - 4)
                     break;
-
-                _animationPlaying = true;
                 
-                objectsByCategoryViewModel.LeftAstronomicalObjectWidth = 0;
-                objectsByCategoryViewModel.MiddleAstronomicalObjectWidth = 0;
-                objectsByCategoryViewModel.RightAstronomicalObjectWidth = 0;
-                
-                CenterObjects(true);
-                
-                objectsByCategoryViewModel.ObjectsOpacity = 0;
-                
-                await Task.Delay(TimeSpan.FromMilliseconds(700));
-                
-                objectsByCategoryViewModel.LeftAstronomicalObjectWidth = 1000;
-                objectsByCategoryViewModel.MiddleAstronomicalObjectWidth = 1000;
-                objectsByCategoryViewModel.RightAstronomicalObjectWidth = 1000;
-                
-                CenterObjects(false);
-                
-                await Task.Delay(TimeSpan.FromMilliseconds(700));
-                
-                objectsByCategoryViewModel.LeftAstronomicalObject =
-                    objectsByCategoryViewModel.AstronomicalObjects[lastObjectId + 1];
-                
-                objectsByCategoryViewModel.MiddleAstronomicalObject =
-                    objectsByCategoryViewModel.AstronomicalObjects[lastObjectId + 2];
-                
-                objectsByCategoryViewModel.RightAstronomicalObject = 
-                    objectsByCategoryViewModel.AstronomicalObjects[lastObjectId + 3];
-                
-                CenterObjects(false);
-                
-                objectsByCategoryViewModel.ObjectsOpacity = 1;
-
-                _animationPlaying = false;
+                ZoomOut(objectsByCategoryViewModel, rightObjectIndex);
                 
                 break;
             }
         }
-        
-        
-        void CenterObjects(bool sizeZeroed)
-        {
-            switch (sizeZeroed)
-            {
-                case true:
-                {
-                    Canvas.SetLeft(LeftAstronomicalObject, CanvasTopLeft.Bounds.Width / 2);
-                    Canvas.SetTop(LeftAstronomicalObject, CanvasTopLeft.Bounds.Height / 2);
-                    Canvas.SetLeft(MiddleAstronomicalObject, CanvasBottomMiddle.Bounds.Width / 2);
-                    Canvas.SetTop(MiddleAstronomicalObject, CanvasBottomMiddle.Bounds.Height / 2);
-                    Canvas.SetLeft(RightAstronomicalObject, CanvasTopRight.Bounds.Width / 2);
-                    Canvas.SetTop(RightAstronomicalObject, CanvasTopRight.Bounds.Height / 2);
+    }
 
-                    break;
-                }
+    private async void ZoomIn(ObjectsByCategoryViewModel objectsByCategoryViewModel, int leftObjectIndex)
+    {
+        _animationPlaying = true;
                 
-                case false:
-                {
-                    Canvas.SetLeft(LeftAstronomicalObject,
-                        (CanvasTopLeft.Bounds.Width - objectsByCategoryViewModel.LeftAstronomicalObjectWidth) / 2);
+        objectsByCategoryViewModel.LeftAstronomicalObjectWidth = 600;
+        objectsByCategoryViewModel.MiddleAstronomicalObjectWidth = 600;
+        objectsByCategoryViewModel.RightAstronomicalObjectWidth = 600;
+                
+        CenterObjects(false, objectsByCategoryViewModel);
+                
+        objectsByCategoryViewModel.ObjectsOpacity = 0;
+                
+        await Task.Delay(TimeSpan.FromMilliseconds(700));
+                
+        objectsByCategoryViewModel.LeftAstronomicalObjectWidth = 0;
+        objectsByCategoryViewModel.MiddleAstronomicalObjectWidth = 0;
+        objectsByCategoryViewModel.RightAstronomicalObjectWidth = 0;
+                
+        CenterObjects(true, objectsByCategoryViewModel);
 
-                    Canvas.SetTop(LeftAstronomicalObject,
-                        (CanvasTopLeft.Bounds.Height - objectsByCategoryViewModel.LeftAstronomicalObjectWidth) / 2);
+        await Task.Delay(TimeSpan.FromMilliseconds(700));
+                
+        objectsByCategoryViewModel.LeftAstronomicalObject =
+            objectsByCategoryViewModel.AstronomicalObjects[leftObjectIndex - 3];
+                
+        objectsByCategoryViewModel.MiddleAstronomicalObject =
+            objectsByCategoryViewModel.AstronomicalObjects[leftObjectIndex - 2];
+                
+        objectsByCategoryViewModel.RightAstronomicalObject = 
+            objectsByCategoryViewModel.AstronomicalObjects[leftObjectIndex - 1];
+                
+        CenterObjects(false, objectsByCategoryViewModel);
+                
+        objectsByCategoryViewModel.ObjectsOpacity = 1;
+        
+        var previousCircle = (Ellipse)ZoomLevels
+            .Children
+            .Single(c => c.Name == _currentZoomLevel.ToString());
 
-                    Canvas.SetLeft(MiddleAstronomicalObject,
-                        (CanvasBottomMiddle.Bounds.Width - objectsByCategoryViewModel.MiddleAstronomicalObjectWidth) /
-                        2);
+        previousCircle.Fill = Brushes.Black;
 
-                    Canvas.SetTop(MiddleAstronomicalObject,
-                        (CanvasBottomMiddle.Bounds.Height - objectsByCategoryViewModel.MiddleAstronomicalObjectWidth) /
-                        2);
+        _currentZoomLevel = (leftObjectIndex - 3) / 3;
 
-                    Canvas.SetLeft(RightAstronomicalObject,
-                        (CanvasTopRight.Bounds.Width - objectsByCategoryViewModel.RightAstronomicalObjectWidth) / 2);
+        var currentCircle = (Ellipse)ZoomLevels
+            .Children
+            .Single(c => c.Name == _currentZoomLevel.ToString());
+        
+        currentCircle.Fill = Brushes.White;
 
-                    Canvas.SetTop(RightAstronomicalObject,
-                        (CanvasTopRight.Bounds.Height - objectsByCategoryViewModel.RightAstronomicalObjectWidth) / 2);
+        _animationPlaying = false;
+    }
 
-                    break;
-                }
+    private async void ZoomOut(ObjectsByCategoryViewModel objectsByCategoryViewModel, int rightObjectIndex)
+    {
+        _animationPlaying = true;
+                
+        objectsByCategoryViewModel.LeftAstronomicalObjectWidth = 0;
+        objectsByCategoryViewModel.MiddleAstronomicalObjectWidth = 0;
+        objectsByCategoryViewModel.RightAstronomicalObjectWidth = 0;
+                
+        CenterObjects(true, objectsByCategoryViewModel);
+                
+        objectsByCategoryViewModel.ObjectsOpacity = 0;
+                
+        await Task.Delay(TimeSpan.FromMilliseconds(700));
+                
+        objectsByCategoryViewModel.LeftAstronomicalObjectWidth = 1000;
+        objectsByCategoryViewModel.MiddleAstronomicalObjectWidth = 1000;
+        objectsByCategoryViewModel.RightAstronomicalObjectWidth = 1000;
+                
+        CenterObjects(false, objectsByCategoryViewModel);
+                
+        await Task.Delay(TimeSpan.FromMilliseconds(700));
+                
+        objectsByCategoryViewModel.LeftAstronomicalObject =
+            objectsByCategoryViewModel.AstronomicalObjects[rightObjectIndex + 1];
+                
+        objectsByCategoryViewModel.MiddleAstronomicalObject =
+            objectsByCategoryViewModel.AstronomicalObjects[rightObjectIndex + 2];
+                
+        objectsByCategoryViewModel.RightAstronomicalObject = 
+            objectsByCategoryViewModel.AstronomicalObjects[rightObjectIndex + 3];
+                
+        CenterObjects(false, objectsByCategoryViewModel);
+                
+        objectsByCategoryViewModel.ObjectsOpacity = 1;
+        
+        var previousCircle = (Ellipse)ZoomLevels
+            .Children
+            .Single(c => c.Name == _currentZoomLevel.ToString());
+
+        previousCircle.Fill = Brushes.Black;
+
+        _currentZoomLevel = (rightObjectIndex + 1) / 3;
+        
+        var currentCircle = (Ellipse)ZoomLevels
+            .Children
+            .Single(c => c.Name == _currentZoomLevel.ToString());
+        
+        currentCircle.Fill = Brushes.White;
+        
+        _animationPlaying = false;
+    }
+    
+    private void CenterObjects(bool sizeZeroed, ObjectsByCategoryViewModel objectsByCategoryViewModel)
+    {
+        switch (sizeZeroed)
+        {
+            case true:
+            {
+                Canvas.SetLeft(LeftAstronomicalObject, CanvasTopLeft.Bounds.Width / 2);
+                Canvas.SetTop(LeftAstronomicalObject, CanvasTopLeft.Bounds.Height / 2);
+                Canvas.SetLeft(MiddleAstronomicalObject, CanvasBottomMiddle.Bounds.Width / 2);
+                Canvas.SetTop(MiddleAstronomicalObject, CanvasBottomMiddle.Bounds.Height / 2);
+                Canvas.SetLeft(RightAstronomicalObject, CanvasTopRight.Bounds.Width / 2);
+                Canvas.SetTop(RightAstronomicalObject, CanvasTopRight.Bounds.Height / 2);
+
+                break;
             }
+            
+            case false:
+            {
+                Canvas.SetLeft(LeftAstronomicalObject,
+                    (CanvasTopLeft.Bounds.Width - objectsByCategoryViewModel.LeftAstronomicalObjectWidth) / 2);
+
+                Canvas.SetTop(LeftAstronomicalObject,
+                    (CanvasTopLeft.Bounds.Height - objectsByCategoryViewModel.LeftAstronomicalObjectWidth) / 2);
+
+                Canvas.SetLeft(MiddleAstronomicalObject,
+                    (CanvasBottomMiddle.Bounds.Width - objectsByCategoryViewModel.MiddleAstronomicalObjectWidth) /
+                    2);
+
+                Canvas.SetTop(MiddleAstronomicalObject,
+                    (CanvasBottomMiddle.Bounds.Height - objectsByCategoryViewModel.MiddleAstronomicalObjectWidth) /
+                    2);
+
+                Canvas.SetLeft(RightAstronomicalObject,
+                    (CanvasTopRight.Bounds.Width - objectsByCategoryViewModel.RightAstronomicalObjectWidth) / 2);
+
+                Canvas.SetTop(RightAstronomicalObject,
+                    (CanvasTopRight.Bounds.Height - objectsByCategoryViewModel.RightAstronomicalObjectWidth) / 2);
+
+                break;
+            }
+        }
+    }
+    
+    private void GenerateZoomLevels(int astronomicalObjectsCount)
+    {
+        _currentZoomLevel = 0;
+        
+        for (int i = 0; i < astronomicalObjectsCount / 3; i++)
+        {
+            var circle = new Ellipse
+            {
+                Name = i.ToString(),
+                Width = 15,
+                Height = 15,
+                Stroke = Brushes.White,
+                StrokeThickness = 1,
+                Fill = i == 0 ? Brushes.White : Brushes.Black
+            };
+
+            circle.PointerEntered += (_, _) => { Cursor = new Cursor(StandardCursorType.Hand); }; 
+            
+            circle.PointerPressed += (_, _) =>
+            {
+                if (_animationPlaying)
+                    return;
+
+                var pressedCircleIndex = Convert.ToInt32(circle.Name);
+                var zoomDirection = pressedCircleIndex - _currentZoomLevel;
+                
+                if (zoomDirection == 0)
+                    return;
+                
+                var objectsByCategoryViewModel = (ObjectsByCategoryViewModel)DataContext!;
+
+                if (zoomDirection < 0)
+                {
+                    ZoomIn(objectsByCategoryViewModel, pressedCircleIndex * 3 + 3);
+                }
+
+                else
+                {
+                    ZoomOut(objectsByCategoryViewModel, pressedCircleIndex * 3 - 1);
+                }
+            };
+            
+            ZoomLevels.Children.Insert(i, circle);    
         }
     }
 }

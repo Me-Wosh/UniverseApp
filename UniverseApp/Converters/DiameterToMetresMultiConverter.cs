@@ -39,7 +39,7 @@ public class DiameterToMetresMultiConverter : IMultiValueConverter
                 return $"{numberAndMinus10Power[0]} * 10^-{System.Convert.ToInt32(numberAndMinus10Power[1])} meters";
             }
 
-            case < 1:
+            case < 0.1m:
             {
                 var result = diameter.ToString();
                 short i = 2, j = 0;
@@ -59,15 +59,15 @@ public class DiameterToMetresMultiConverter : IMultiValueConverter
 
                 if (i + 1 < result.Length)
                 {
-                    return result.Remove(i + 1);
+                    return result.Remove(i + 1) + " meters";
                 }
 
-                return result;
+                return result + " meters";
             }
 
             case < 1000:
             {
-                return metresInCentimeter.ToString("F2") + " metres";
+                return metresInCentimeter.ToString("N2") + " meters";
             }
         }
 

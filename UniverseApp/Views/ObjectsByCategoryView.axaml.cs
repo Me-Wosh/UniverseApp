@@ -79,10 +79,11 @@ public partial class ObjectsByCategoryView : UserControl
         var astronomicalObjectsCount = new AstronomicalObjects().ListOfObjects.Count;
         GenerateZoomLevels(astronomicalObjectsCount);
         
+        KeyUp += OnKeyUp;
+        
         Loaded += (_, _) =>
         {
-            var parentWindow = Window.GetTopLevel(this);
-            parentWindow!.KeyUp += OnKeyUp;
+            Focus();
             
             (DataContext as ObjectsByCategoryViewModel)!.AstronomicalObjects.CollectionChanged += (_, _) =>
             {

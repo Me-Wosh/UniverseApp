@@ -8,11 +8,65 @@ public sealed class AstronomicalObjects
     {
         new AstronomicalObject
         {
+            Name = "Average Human",
+            Diameter = 1.7m,
+            Category = ObjectCategory.LifeForm,
+            Classification = ObjectClassification.Human,
+            Description = "Dumbest living animal"
+        },
+        
+        new AstronomicalObject
+        {
+            Name = "African Bush Elephant",
+            Diameter = 3.96m,
+            Category = ObjectCategory.LifeForm,
+            Classification = ObjectClassification.Animal,
+            Description = "Heaviest living land animal"
+        },
+        
+        new AstronomicalObject
+        {
+            Name = "Giraffe",
+            Diameter = 5.8m,
+            Category = ObjectCategory.LifeForm,
+            Classification = ObjectClassification.Animal,
+            Description = "Tallest living land animal"
+        },
+        
+        new AstronomicalObject
+        {
+            Name = "Europa",
+            Diameter = 3_100_000,
+            Category = ObjectCategory.Moon,
+            Classification = ObjectClassification.None,
+            Description = "Jupiter's moon that potentially has sea life"
+        },
+        
+        new AstronomicalObject
+        {
+            Name = "The Moon",
+            Diameter = 3_474_800,
+            Category = ObjectCategory.Moon,
+            Classification = ObjectClassification.None,
+            Description = "Earth's only natural satellite"
+        },
+        
+        new AstronomicalObject
+        {
             Name = "Mercury",
             Diameter = 4_880_000,
             Category = ObjectCategory.Planet,
             Classification = ObjectClassification.TerrestrialPlanet,
             Description = "The smallest planet of the Solar System"
+        },
+        
+        new AstronomicalObject
+        {
+            Name = "Ganymede",
+            Diameter = 5_268_200,
+            Category = ObjectCategory.Moon,
+            Classification = ObjectClassification.None,
+            Description = "Largest moon in the Solar System"
         },
         
         new AstronomicalObject

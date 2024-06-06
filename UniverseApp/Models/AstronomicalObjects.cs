@@ -106,6 +106,15 @@ public sealed class AstronomicalObjects
         
         new AstronomicalObject
         {
+            Name = "Saturn", 
+            Diameter = 270_000_000, 
+            Category = ObjectCategory.Planet,
+            Classification = ObjectClassification.GasGiant,
+            Description = "Planet with more moons than all the other Solar System planets combined"
+        },
+        
+        new AstronomicalObject
+        {
             Name = "Proxima Centauri",
             Diameter = 214_554_000,
             Category = ObjectCategory.Star,
@@ -118,7 +127,69 @@ public sealed class AstronomicalObjects
             Name = "The Sun",
             Diameter = 1_392_700_000,
             Category = ObjectCategory.Star,
-            Classification = ObjectClassification.YellowDwarf
+            Classification = ObjectClassification.GTypeMainSequence,
+            Description = "Center of our Solar System"
+        },
+        
+        new AstronomicalObject
+        {
+            Name = "Sirius A",
+            Diameter = 2_380_685_400,
+            Category = ObjectCategory.Star,
+            Classification = ObjectClassification.ATypeMainSequence,
+            Description = "The brightest known star"
+        },
+        
+        new AstronomicalObject
+        {
+            Name = "NGC 1600",
+            Diameter = 9.888e+13m,
+            Category = ObjectCategory.BlackHole,
+            Classification = ObjectClassification.SupermassiveBlackHole
+        },
+        
+        new AstronomicalObject
+        {
+            Name = "TON 618",
+            Diameter = 3.92e+14m,
+            Category = ObjectCategory.BlackHole,
+            Classification = ObjectClassification.SupermassiveBlackHole
+        },
+        
+        new AstronomicalObject
+        {
+            Name = "Phoenix A",
+            Diameter = 5.905e+14m,
+            Category = ObjectCategory.BlackHole,
+            Classification = ObjectClassification.SupermassiveBlackHole,
+            Description = "The largest known black hole"
+        },
+        
+        new AstronomicalObject
+        {
+            Name = "Milky Way",
+            Diameter = 8.2687e+20m,
+            Category = ObjectCategory.Galaxy,
+            Classification = ObjectClassification.None,
+            Description = "Our home galaxy"
+        },
+        
+        new AstronomicalObject
+        {
+            Name = "Hoag's Object",
+            Diameter = 1.400188109941959e+21m,
+            Category = ObjectCategory.Galaxy,
+            Classification = ObjectClassification.None,
+            Description = "Galaxy with an unusual shape"
+        },
+        
+        new AstronomicalObject
+        {
+            Name = "Andromeda",
+            Diameter = 1.4380e+21m,
+            Category = ObjectCategory.Galaxy,
+            Classification = ObjectClassification.None,
+            Description = "Galaxy that we are going to collide with"
         }
     };
 }

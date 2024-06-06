@@ -105,6 +105,7 @@
                     IsVisible="False"
                     SelectedItem="{Binding SecondSelectedObject, Mode=OneWayToSource}"
                     SelectionMode="Single"
+                    MaxHeight="266"
                 >
                     <ListBox.ItemTemplate>
                         <DataTemplate DataType="{x:Type models:AstronomicalObject}">

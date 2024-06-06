@@ -66,15 +66,19 @@ public partial class ObjectsByCategoryView : UserControl
         };
         
         // Center objects before rendering to avoid 700 milliseconds transition
+
+        const double leftObjectHeightAndWidth = 82.948275862068968;
+        const double middleObjectHeightAndWidth = 193.22068965517241;
+        const double rightObjectHeightAndWidth = 283;
         
-        Canvas.SetLeft(LeftAstronomicalObject, (350 - 83.37297610567113) / 2);
-        Canvas.SetTop(LeftAstronomicalObject, (283 - 83.37297610567113) / 2);
+        Canvas.SetLeft(LeftAstronomicalObject, (350 - leftObjectHeightAndWidth) / 2);
+        Canvas.SetTop(LeftAstronomicalObject, (283 - leftObjectHeightAndWidth) / 2);
                 
-        Canvas.SetLeft(MiddleAstronomicalObject, (350 - 217.6923076923077) / 2);
-        Canvas.SetTop(MiddleAstronomicalObject, (282.5 - 217.6923076923077) / 2);
+        Canvas.SetLeft(MiddleAstronomicalObject, (350 - middleObjectHeightAndWidth) / 2);
+        Canvas.SetTop(MiddleAstronomicalObject, (282.5 - middleObjectHeightAndWidth) / 2);
         
-        Canvas.SetLeft(RightAstronomicalObject, 0);
-        Canvas.SetTop(RightAstronomicalObject, 0);
+        Canvas.SetLeft(RightAstronomicalObject, (350 - rightObjectHeightAndWidth) / 2);
+        Canvas.SetTop(RightAstronomicalObject, (283 - rightObjectHeightAndWidth) / 2);
 
         var astronomicalObjectsCount = new AstronomicalObjects().ListOfObjects.Count;
         GenerateZoomLevels(astronomicalObjectsCount);
@@ -138,7 +142,7 @@ public partial class ObjectsByCategoryView : UserControl
                 var rightObjectIndex = objectsByCategoryViewModel.AstronomicalObjects.ToList()
                     .FindIndex(o => o.Name == objectsByCategoryViewModel.RightAstronomicalObject.Name);
 
-                if (rightObjectIndex >= objectsByCategoryViewModel.AstronomicalObjects.Count - 4)
+                if (rightObjectIndex >= objectsByCategoryViewModel.AstronomicalObjects.Count - 3)
                     break;
                 
                 ZoomOut(objectsByCategoryViewModel, rightObjectIndex);

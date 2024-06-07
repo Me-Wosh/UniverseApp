@@ -89,7 +89,7 @@ public partial class ObjectsByCategoryView : UserControl
         {
             Focus();
             
-            (DataContext as ObjectsByCategoryViewModel)!.AstronomicalObjects.CollectionChanged += (_, _) =>
+            (DataContext as ObjectsByCategoryViewModel)!.AstronomicalObjectsChanged += (_, _) =>
             {
                 astronomicalObjectsCount = (DataContext as ObjectsByCategoryViewModel)!.AstronomicalObjects.Count;
                 
@@ -99,6 +99,8 @@ public partial class ObjectsByCategoryView : UserControl
                 }
                 
                 GenerateZoomLevels(astronomicalObjectsCount);
+                
+                CenterObjects(false, (DataContext as ObjectsByCategoryViewModel)!);
             };
         };
     }

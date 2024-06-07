@@ -43,10 +43,19 @@ public sealed class ObjectsByCategoryViewModel : ViewModelBase
             LeftAstronomicalObjectWidth = resizedObjects[0];
             MiddleAstronomicalObjectWidth = resizedObjects[1];
             RightAstronomicalObjectWidth = resizedObjects[2];
+            
+            OnAstronomicalObjectsChanged();
         });
     }
     
     public ObservableCollection<AstronomicalObject> AstronomicalObjects { get; }
+
+    public event EventHandler AstronomicalObjectsChanged;
+
+    private void OnAstronomicalObjectsChanged()
+    {
+        AstronomicalObjectsChanged?.Invoke(this, null);
+    }
     
     public string? SelectedCategory
     {

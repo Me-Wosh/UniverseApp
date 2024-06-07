@@ -7,21 +7,57 @@ Project that lets you explore The Universe and compare its objects. My main purp
 
 ## Documentation
 
-- ### Main window
+- ### Objects By Category view
+<img width="1192" alt="Objects By Category" src="https://github.com/Me-Wosh/UniverseApp/assets/101999705/37df6d51-ec1e-4dbe-b668-76286777abc3">
 
-- ### Zoom in and zoom out
+- ### Change category
+<br>
+
+https://github.com/Me-Wosh/UniverseApp/assets/101999705/c1bda40b-c670-488a-b521-e12ce211ce57
+
+<br>
+
+- ### Zoom in with up arrow key and zoom out with down arrow
+<br>
+
+https://github.com/Me-Wosh/UniverseApp/assets/101999705/96e4970f-b4fa-4cee-a03f-7ac61a1d639e
+
+<br>
 
 - ### Fast forward between zoom levels
+<br>
+
+https://github.com/Me-Wosh/UniverseApp/assets/101999705/95d062e0-b8d1-4be5-83c2-afe45c5231af
+
+<br>
 
 - ### Astronomical object description
+<br>
 
-- ### Change windows
+https://github.com/Me-Wosh/UniverseApp/assets/101999705/ab1192f9-95f7-4c61-a3f1-54f7d97937ae
 
-- ### Compare Objects window
+<br/>
+
+- ### Changing views
+<br/>
+
+https://github.com/Me-Wosh/UniverseApp/assets/101999705/e481b5d2-590c-415e-946e-d0d70a81b961
+
+<br/>
+
+- ### Compare Objects view
+<img width="1192" alt="Compare Objects" src="https://github.com/Me-Wosh/UniverseApp/assets/101999705/025fb621-ee4f-4283-b8b9-b59e7f4fab02">
 
 - ### Search for an object
+<br/>
+
+https://github.com/Me-Wosh/UniverseApp/assets/101999705/b16a485f-d171-4263-a9ab-abda7c727f88
+
+<br/>
 
 ## Image sources
+Please contact me if I didn't tag the owner at all or did it incorrectly or if the image turns out not to be free for non-commercial usage.
+
 * <a href="https://www.nasa.gov" target="_blank">nasa.gov</a>
 * <a href="https://photojournal.jpl.nasa.gov/jpeg/PIA25695.jpg">Europa - NASA/JPL-Caltech/SwRI/MSSS/Kevin M. Gill, CC BY 3.0</a>
 * <a href="https://commons.wikimedia.org/w/index.php?curid=11901243">The Moon - By Gregory H. Revera, CC BY-SA 3.0</a>
